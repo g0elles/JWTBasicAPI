@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTCapacitorProxy", "GTCapacitorProxy\GTCapacitorProxy.csproj", "{1B63478B-A56C-4298-B6C7-EEAEBB8C7B06}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicAPI", "BasicAPI\BasicAPI.csproj", "{1B63478B-A56C-4298-B6C7-EEAEBB8C7B06}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

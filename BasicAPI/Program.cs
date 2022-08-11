@@ -1,8 +1,10 @@
 using System.Text;
-using GTCapacitorProxy.Configuration;
-using GTCapacitorProxy.Interfaces;
-using GTCapacitorProxy.Services;
+using BasicAPI.Configuration;
+using BasicAPI.Interfaces;
+using BasicAPI.Models.Data;
+using BasicAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -18,7 +20,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "MiddlewareProxy", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "EmployeesAPI", Version = "v1" });
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
     {
         Name = "Authorization",
@@ -30,23 +32,29 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Services.AddDbContext<CidenetDBContext>(options =>
+options.UseSqlServer(builder.Configuration["ConnectionStrings:CidenetDB"]));
+
 builder.Services.Configure<AuthUsers>(builder.Configuration.GetSection(nameof(AuthUsers)));
 builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection(nameof(JwtConfig)));
 
 builder.Services.AddTransient<ILoginService, LoginService>();
 builder.Services.AddTransient<ITokenService, TokenService>();
-builder.Services.AddTransient<IMiddleWareService, MiddleWareService>();
+builder.Services.AddTransient<IEmployeeService, EmployeeService>();
+
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(
         name: CorsOpenPolicy,
-        Polbuilder => {
+        Polbuilder =>
+        {
             Polbuilder.WithOrigins("*").AllowAnyHeader().AllowAnyMethod();
         });
 });
 
-builder.Services.AddAuthentication(options => {
+builder.Services.AddAuthentication(options =>
+{
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;

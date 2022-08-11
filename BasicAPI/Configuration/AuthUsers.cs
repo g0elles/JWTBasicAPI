@@ -1,4 +1,4 @@
-﻿namespace GTCapacitorProxy.Configuration;
+﻿namespace BasicAPI.Configuration;
 
 public class AuthUsers
 {

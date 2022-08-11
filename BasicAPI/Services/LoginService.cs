@@ -1,9 +1,9 @@
-﻿using GTCapacitorProxy.Configuration;
-using GTCapacitorProxy.Interfaces;
-using GTCapacitorProxy.Models;
+﻿using BasicAPI.Configuration;
+using BasicAPI.Interfaces;
+using BasicAPI.Models.Requests;
 using Microsoft.Extensions.Options;
 
-namespace GTCapacitorProxy.Services;
+namespace BasicAPI.Services;
 
 public class LoginService : ILoginService
 {
@@ -13,12 +13,12 @@ public class LoginService : ILoginService
     {
         _users = optionsMonitor.CurrentValue;
     }
-    
+
     public bool Authenticate(LoginRequest user)
     {
-        return (user.Username.Equals(Decrypt(_users.user)) && user.Password.Equals(Decrypt(_users.password))) ;
+        return (user.Username.Equals(Decrypt(_users.user)) && user.Password.Equals(Decrypt(_users.password)));
     }
-    
+
     private static string Decrypt(string cipher)
     {
         var data = System.Convert.FromBase64String(cipher);

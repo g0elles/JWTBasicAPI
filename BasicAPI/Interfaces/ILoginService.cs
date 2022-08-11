@@ -1,6 +1,6 @@
-﻿using GTCapacitorProxy.Models;
+﻿using BasicAPI.Models.Requests;
 
-namespace GTCapacitorProxy.Interfaces;
+namespace BasicAPI.Interfaces;
 
 public interface ILoginService
 {

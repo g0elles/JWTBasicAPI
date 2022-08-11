@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "GTCapacitorProxy": {
+    "BasicAPI": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
