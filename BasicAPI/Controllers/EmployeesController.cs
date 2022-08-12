@@ -2,10 +2,12 @@
 using BasicAPI.DTOs;
 using BasicAPI.Interfaces;
 using BasicAPI.Models.Requests;
+using BasicAPI.Models.Searchs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace BasicAPI.Controllers;
 
@@ -95,6 +97,28 @@ public class EmployeesController : Controller
             IdentificationType = employee.TipoIdentificacion,
             Id = employee.Id
         });
+    }
+
+    [HttpGet("api/[controller]")]
+    public async Task<ActionResult> GetEmployees([FromQuery] EmployeeParams query)
+    {
+        var employeees = _employees.GetEmployees(query);
+        var postList = employeees.Result.Select(employee => new WorkerDto
+        {
+            Area = employee.Area,
+            Email = employee.Correo,
+            Status = employee.Estado,
+            RegistryDate = employee.FechaRegistro,
+            Identification = employee.Identificacion,
+            Country = employee.Pais,
+            Surname = employee.PrimerApellido,
+            FirstName = employee.PrimerNombre,
+            SecondSurname = employee.SegundoApellido,
+            MiddleName = employee.SegundoNombre,
+            IdentificationType = employee.TipoIdentificacion,
+            Id = employee.Id
+        }).ToList();
+        return Ok(postList);
     }
 
 }

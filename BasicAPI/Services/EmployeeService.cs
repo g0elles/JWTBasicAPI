@@ -58,13 +58,15 @@ public class EmployeeService : IEmployeeService
         return await _db.Funcionarios.Where(x => x.Identificacion.Equals(id)).FirstOrDefaultAsync();
     }
 
-    public async Task<List<Funcionario>> GetEmployees(EmployeeParams query)
+    public async Task<List<Funcionario>> GetEmployees(EmployeeParams query = null)
     {
-        IQueryable<Funcionario> funcionarios = _db.Funcionarios;
+      var funcionarios = _db.Funcionarios.AsQueryable();
 
-      //  if(query.FirstName != null) funcionarios.Where()
-        throw new NotImplementedException();
+      funcionarios = AddFiltersOnQuery(query, funcionarios);
+      return await funcionarios.ToListAsync();
     }
+
+
 
     public async Task<Funcionario> UpdateEmployee(Funcionario funcionario,bool change_in_names)
     {
@@ -73,6 +75,43 @@ public class EmployeeService : IEmployeeService
         _db.Funcionarios.Update(funcionario);
         await _db.SaveChangesAsync();
         return funcionario;
+    }
+    
+    private static IQueryable<Funcionario> AddFiltersOnQuery(EmployeeParams query, IQueryable<Funcionario> funcionarios)
+    {
+        if (!String.IsNullOrEmpty(query?.FirstName))
+        {
+            funcionarios = funcionarios.Where(x => x.PrimerNombre == query.FirstName);
+        }
+        if (!String.IsNullOrEmpty(query?.MiddleName))
+        {
+            funcionarios = funcionarios.Where(x => x.SegundoNombre == query.MiddleName);
+        }
+        if (!String.IsNullOrEmpty(query?.Surname))
+        {
+            funcionarios = funcionarios.Where(x => x.PrimerApellido == query.Surname);
+        }
+        if (!String.IsNullOrEmpty(query?.SecondSurname))
+        {
+            funcionarios = funcionarios.Where(x => x.SegundoApellido == query.SecondSurname);
+        }
+        if (!String.IsNullOrEmpty(query?.IdentificationType))
+        {
+            funcionarios = funcionarios.Where(x => x.TipoIdentificacion == query.IdentificationType);
+        }
+        if (!String.IsNullOrEmpty(query?.Identification))
+        {
+            funcionarios = funcionarios.Where(x => x.Identificacion == query.Identification);
+        }
+        if (!String.IsNullOrEmpty(query?.Email))
+        {
+            funcionarios = funcionarios.Where(x => x.Correo == query.Email);
+        }
+        if (!String.IsNullOrEmpty(query?.Country))
+        {
+            funcionarios = funcionarios.Where(x => x.Pais == query.Country);
+        }
+        return funcionarios;
     }
     
 }

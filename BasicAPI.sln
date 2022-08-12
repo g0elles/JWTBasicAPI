@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicAPI", "BasicAPI\BasicAPI.csproj", "{1B63478B-A56C-4298-B6C7-EEAEBB8C7B06}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicApiUnitTest", "BasicApiUnitTest\BasicApiUnitTest.csproj", "{C65F1BE2-34EA-4E5B-81DD-7C165DEFDCF8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{1B63478B-A56C-4298-B6C7-EEAEBB8C7B06}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B63478B-A56C-4298-B6C7-EEAEBB8C7B06}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B63478B-A56C-4298-B6C7-EEAEBB8C7B06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C65F1BE2-34EA-4E5B-81DD-7C165DEFDCF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C65F1BE2-34EA-4E5B-81DD-7C165DEFDCF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C65F1BE2-34EA-4E5B-81DD-7C165DEFDCF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C65F1BE2-34EA-4E5B-81DD-7C165DEFDCF8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

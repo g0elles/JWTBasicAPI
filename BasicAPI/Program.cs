@@ -1,5 +1,6 @@
 using System.Text;
 using BasicAPI.Configuration;
+using BasicAPI.Helpers;
 using BasicAPI.Interfaces;
 using BasicAPI.Models.Data;
 using BasicAPI.Services;
@@ -88,6 +89,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseCors(CorsOpenPolicy);
+
+app.UseMiddleware<ErrorHandlerMiddleware>();
 
 app.UseAuthentication();
 
