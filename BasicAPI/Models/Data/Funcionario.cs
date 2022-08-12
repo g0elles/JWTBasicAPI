@@ -14,10 +14,10 @@ namespace BasicAPI.Models.Data
         public string TipoIdentificacion { get; set; } = null!;
         public string Identificacion { get; set; } = null!;
         public string Correo { get; set; } = null!;
-        public DateTime FechaIngreso { get; set; }
+        public DateTime? FechaIngreso { get; set; }
         public string Area { get; set; } = null!;
         public bool Estado { get; set; }
-        public DateTime FechaRegistro { get; set; }
-        public DateTime FechaActualizacion { get; set; }
+        public DateTime? FechaRegistro { get; set; }
+        public DateTime? FechaActualizacion { get; set; }
     }
 }

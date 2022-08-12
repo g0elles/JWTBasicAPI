@@ -4,6 +4,9 @@ namespace BasicAPI.Models.Requests;
 
 public class UpdateWorkerRequest
 {
+    [Required]
+    public int Id { get; set; }
+
     [Required, MaxLength(20)]
     public string FirstName { get; set; }
 
@@ -25,7 +28,7 @@ public class UpdateWorkerRequest
     [Required, MaxLength(20)]
     public string Identification { get; set; }
 
-    [Required, MaxLength(300)]
+    [MaxLength(300)]
     public string Email { get; set; }
 
     [Required, MaxLength(50)]
@@ -34,5 +37,6 @@ public class UpdateWorkerRequest
     [Required]
     public bool Status { get; set; }
 
-    public DateTime ActualizationDate { get; set; }
+    [Required]
+    public DateTime EntryDate { get; set; }
 }

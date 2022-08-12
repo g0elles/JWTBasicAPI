@@ -27,7 +27,7 @@ public class CreateWorkerRequest
     [Required, MaxLength(20)]
     public string Identification { get; set; }
 
-    [Required, MaxLength(300)]
+    [MaxLength(300)]
     public string Email { get; set; }
 
     [Required, MaxLength(50)]
@@ -36,6 +36,7 @@ public class CreateWorkerRequest
     [Required]
     public bool Status { get; set; }
 
-    public DateTime RegistryDate { get; set; }
+    [Required]
+    public DateTime EntryDate { get; set; }
 
 }

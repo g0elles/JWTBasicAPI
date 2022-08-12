@@ -2,6 +2,7 @@ using BasicAPI.DTOs;
 using BasicAPI.Interfaces;
 using BasicAPI.Models.Data;
 using BasicAPI.Models.Requests;
+using BasicAPI.Models.Searchs;
 using Microsoft.EntityFrameworkCore;
 
 namespace BasicAPI.Services;
@@ -9,21 +10,24 @@ namespace BasicAPI.Services;
 public class EmployeeService : IEmployeeService
 {
     private readonly CidenetDBContext _db;
+    private readonly IMailService _mailService;
 
-    public EmployeeService(CidenetDBContext db)
+    public EmployeeService(CidenetDBContext db, IMailService mailService)
     {
         _db = db;
+        _mailService = mailService;
     }
 
 
-    public async Task<WorkerDto> CreateEmployee(CreateWorkerRequest employee)
+    public async Task CreateEmployee(CreateWorkerRequest employee)
     {
+        string email = _mailService.CreateMail(employee.FirstName, employee.Surname, employee.Country);
         Funcionario funcionario = new Funcionario
         {
             Area = employee.Area,
-            Correo = employee.Email,
+            Correo = email,
             Estado = employee.Status,
-            FechaIngreso = employee.RegistryDate,
+            FechaIngreso = employee.EntryDate,
             FechaRegistro = DateTime.Now,
             Identificacion = employee.Identification,
             Pais = employee.Country,
@@ -35,118 +39,40 @@ public class EmployeeService : IEmployeeService
         };
         await _db.Funcionarios.AddAsync(funcionario);
         await _db.SaveChangesAsync();
-        return new WorkerDto
-        {
-            Area = employee.Area,
-            Email = employee.Email,
-            Status = employee.Status,
-            RegistryDate = funcionario.FechaRegistro,
-            Identification = employee.Identification,
-            Country = employee.Country,
-            Surname = employee.Surname,
-            FirstName = employee.FirstName,
-            SecondSurname = employee.SecondSurname,
-            MiddleName = employee.MiddleName,
-            IdentificationType = employee.IdentificationType,
-            Id = funcionario.Id
-        };
     }
 
-    public async Task<bool> DeleteEmployee(int id)
-    {
-        try
-        {
-            var employee = await _db.Funcionarios.FindAsync(id);
-            _db.Funcionarios.Remove(employee);
-            await _db.SaveChangesAsync();
-        }
-        catch (System.Exception)
-        {
-            return false;
-        }
-        return true;
-    }
-
-    public async Task<WorkerDto> GetEmployee(int id)
+    public async Task DeleteEmployee(int id)
     {
         var employee = await _db.Funcionarios.FindAsync(id);
-
-        return new WorkerDto
-        {
-            Area = employee.Area,
-            Email = employee.Correo,
-            Status = employee.Estado,
-            RegistryDate = employee.FechaRegistro,
-            Identification = employee.Identificacion,
-            Country = employee.Pais,
-            Surname = employee.PrimerApellido,
-            FirstName = employee.PrimerNombre,
-            SecondSurname = employee.SegundoApellido,
-            MiddleName = employee.SegundoNombre,
-            IdentificationType = employee.TipoIdentificacion,
-            Id = employee.Id
-        };
+        if (employee != null)
+            _db.Funcionarios.Remove(employee); await _db.SaveChangesAsync();
     }
 
-    public async Task<WorkerDto> GetEmployee(string id)
+    public async Task<Funcionario> GetEmployee(int id)
     {
-        var employee = await _db.Funcionarios.Where(x => x.Identificacion.Equals(id)).FirstAsync();
-
-        return new WorkerDto
-        {
-            Area = employee.Area,
-            Email = employee.Correo,
-            Status = employee.Estado,
-            RegistryDate = employee.FechaRegistro,
-            Identification = employee.Identificacion,
-            Country = employee.Pais,
-            Surname = employee.PrimerApellido,
-            FirstName = employee.PrimerNombre,
-            SecondSurname = employee.SegundoApellido,
-            MiddleName = employee.SegundoNombre,
-            IdentificationType = employee.TipoIdentificacion,
-            Id = employee.Id
-        };
+        return await _db.Funcionarios.Where(x => x.Id == id).FirstOrDefaultAsync();
     }
 
-    public async Task<List<WorkerDto>> GetEmployees(string query)
+    public async Task<Funcionario> GetEmployee(string id)
     {
+        return await _db.Funcionarios.Where(x => x.Identificacion.Equals(id)).FirstOrDefaultAsync();
+    }
+
+    public async Task<List<Funcionario>> GetEmployees(EmployeeParams query)
+    {
+        IQueryable<Funcionario> funcionarios = _db.Funcionarios;
+
+      //  if(query.FirstName != null) funcionarios.Where()
         throw new NotImplementedException();
     }
 
-    public async Task<WorkerDto> UpdateEmployee(UpdateWorkerRequest employee)
+    public async Task<Funcionario> UpdateEmployee(Funcionario funcionario,bool change_in_names)
     {
-        Funcionario funcionario = new Funcionario
-        {
-            Area = employee.Area,
-            Correo = employee.Email,
-            Estado = employee.Status,
-            FechaRegistro = DateTime.Now,
-            Identificacion = employee.Identification,
-            Pais = employee.Country,
-            PrimerApellido = employee.Surname,
-            PrimerNombre = employee.FirstName,
-            SegundoApellido = employee.SecondSurname,
-            SegundoNombre = employee.MiddleName,
-            TipoIdentificacion = employee.IdentificationType,
-            FechaActualizacion = DateTime.Now
-        };
+        funcionario.Correo = change_in_names ? _mailService.CreateMail(funcionario.PrimerNombre, funcionario.PrimerApellido, funcionario.Pais) : funcionario.Correo;
+
         _db.Funcionarios.Update(funcionario);
         await _db.SaveChangesAsync();
-        return new WorkerDto
-        {
-            Area = employee.Area,
-            Email = employee.Email,
-            Status = employee.Status,
-            RegistryDate = funcionario.FechaRegistro,
-            Identification = employee.Identification,
-            Country = employee.Country,
-            Surname = employee.Surname,
-            FirstName = employee.FirstName,
-            SecondSurname = employee.SecondSurname,
-            MiddleName = employee.MiddleName,
-            IdentificationType = employee.IdentificationType,
-            Id = funcionario.Id
-        };
+        return funcionario;
     }
+    
 }

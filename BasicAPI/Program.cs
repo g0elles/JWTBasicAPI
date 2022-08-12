@@ -41,6 +41,7 @@ builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection(nameof(Jw
 builder.Services.AddTransient<ILoginService, LoginService>();
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddTransient<IEmployeeService, EmployeeService>();
+builder.Services.AddTransient<IMailService, MailService>();
 
 
 builder.Services.AddCors(options =>

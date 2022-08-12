@@ -31,7 +31,7 @@ namespace BasicAPI.Models.Data
         {
             modelBuilder.Entity<Funcionario>(entity =>
             {
-                entity.HasNoKey();
+              //  entity.HasNoKey();
 
                 entity.ToTable("FUNCIONARIOS");
 
